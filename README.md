@@ -19,9 +19,8 @@ A **custom card** for Home Assistant that allows adjusting **two** `input_number
 - Add the resource to `configuration.yaml` or via the UI  
 
 ```yaml
-resources:
-  - url: /local/range-slider-card.js
-    type: module JavaScript
+- type: module 
+  url: /local/range-slider-card.js
 ```
 
 
