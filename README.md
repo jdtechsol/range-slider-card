@@ -6,8 +6,7 @@ A **custom card** for Home Assistant that allows adjusting **two** `input_number
 ## 🚀 Features  
 ✅ **Dual Value Control** – Adjust two `input_number` values with a single slider.  
 ✅ **Custom Ranges** – Define your own minimum and maximum value limits.  
-✅ **User-Friendly UI** – Smooth and intuitive interaction.  
-✅ **Fully Configurable** – Easy to customize and integrate into your Lovelace dashboard.  
+
 
 ## 📌 Installation  
 
@@ -35,7 +34,7 @@ entity_max: input_number.max_value
 min: 0
 max: 100
 step: 1
-unit: "%"
+
 ```
 
 ### 🔧 Options  
@@ -47,7 +46,7 @@ unit: "%"
 | `min`       | number | The minimum selectable value |
 | `max`       | number | The maximum selectable value |
 | `step`      | number | Increment step for the slider |
-#| `unit`      | string | Display unit (e.g., `%`, `°C`, etc.) |
+
 
 ## 📷 Preview  
 *(Add a screenshot or GIF here to showcase the card in action!)*  
