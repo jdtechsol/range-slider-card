@@ -43,7 +43,10 @@ step: 1
 | `max`       | number | The maximum selectable value |
 | `step`      | number | Increment step for the slider |
 
+🐞 Bugs
+If the card is not displaying in Home Assistant, please try the following troubleshooting steps:
 
+Clear your browser cache or the Home Assistant app cache to ensure that the latest resources are loaded.
  
 
 ## 🛠️ Contributing  
