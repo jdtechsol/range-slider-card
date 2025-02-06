@@ -49,7 +49,7 @@ step: 1
 
 
 ## 📷 Preview  
-![Preview of the card](assets/Screen_Recording_20250206_183226_Home Assistant_1.gif)  
+![all](assets/Screen_Recording_20250206_183226_Home Assistant_1.gif)  
 
 ## 🛠️ Contributing  
 Feel free to submit issues or pull requests to improve this component!  
