@@ -49,7 +49,7 @@ step: 1
 
 
 ## 📷 Preview  
-*(Add a screenshot or GIF here to showcase the card in action!)*  
+![Preview of the card](assets/preview.gif)  
 
 ## 🛠️ Contributing  
 Feel free to submit issues or pull requests to improve this component!  
