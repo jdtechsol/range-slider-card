@@ -1,5 +1,5 @@
 
-# 📊 Home Assistant Range Slider Card  
+# 📊 Home Assistant Range Slider Card  (beta)
 
 A **custom card** for Home Assistant that allows adjusting **two** `input_number` values with a **single slider**, enabling the selection of a custom value range.  
 
