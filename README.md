@@ -16,13 +16,7 @@ A **custom card** for Home Assistant that allows adjusting **two** `input_number
 ### 1️⃣ Manual Installation  
 - Download `range-slider-card.js`  
 - Place it in your `www` folder in Home Assistant  
-- Add the resource to `configuration.yaml` or via the UI  
-
-```yaml
-- type: module 
-  url: /local/range-slider-card.js
-```
-
+- Installation instructions: go to Settings > Dashboards > (top right, the three dots) > Resources > Add resource > paste the following URL: /local/range-slider-card.js
 
 
 ## ⚙️ Configuration  
