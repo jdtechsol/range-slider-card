@@ -3,6 +3,9 @@
 
 A **custom card** for Home Assistant that allows adjusting **two** `input_number` values with a **single slider**, enabling the selection of a custom value range.  
 
+## 📷 Preview  
+![all](https://github.com/Gasp96/range-slider-card/blob/main/assets/Screen_Recording_20250206_183226_Home%20Assistant_1.gif) 
+
 ## 🚀 Features  
 ✅ **Dual Value Control** – Adjust two `input_number` values with a single slider.  
 ✅ **Custom Ranges** – Define your own minimum and maximum value limits.  
@@ -48,8 +51,7 @@ step: 1
 | `step`      | number | Increment step for the slider |
 
 
-## 📷 Preview  
-![all](https://github.com/Gasp96/range-slider-card/blob/main/assets/Screen_Recording_20250206_183226_Home%20Assistant_1.gif)  
+ 
 
 ## 🛠️ Contributing  
 Feel free to submit issues or pull requests to improve this component!  
