@@ -47,7 +47,7 @@ unit: "%"
 | `min`       | number | The minimum selectable value |
 | `max`       | number | The maximum selectable value |
 | `step`      | number | Increment step for the slider |
-| `unit`      | string | Display unit (e.g., `%`, `°C`, etc.) |
+#| `unit`      | string | Display unit (e.g., `%`, `°C`, etc.) |
 
 ## 📷 Preview  
 *(Add a screenshot or GIF here to showcase the card in action!)*  
