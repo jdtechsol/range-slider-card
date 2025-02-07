@@ -5,6 +5,8 @@ A **custom card** for Home Assistant that allows adjusting **two** `input_number
 
 ## 📷 Preview  
 ![all](https://github.com/Gasp96/range-slider-card/blob/main/assets/Screen_Recording_20250206_183226_Home%20Assistant_1.gif) 
+Small version
+![all](https://github.com/Gasp96/range-slider-card/blob/main/assets/Screen_Recording_20250207_122654_Home%20Assistant_1.gif) 
 
 ## 🚀 Features  
 ✅ **Dual Value Control** – Adjust two `input_number` values with a single slider.  
