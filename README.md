@@ -30,7 +30,7 @@ entity_max: input_number.max_value
 min: 0
 max: 100
 step: 1
-
+unit: "%"
 ```
 
 ### 🔧 Options  
@@ -42,6 +42,7 @@ step: 1
 | `min`       | number | The minimum selectable value |
 | `max`       | number | The maximum selectable value |
 | `step`      | number | Increment step for the slider |
+| `unit`      | string | Display unit (e.g., `%`, `°C`, etc.) |
 
 ### 🐞 Bugs
 
