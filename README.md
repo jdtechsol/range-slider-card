@@ -30,7 +30,7 @@ entity_max: input_number.max_value
 min: 0
 max: 100
 step: 1
-unit: "%"
+unit: '%'
 ```
 
 ### 🔧 Options  
