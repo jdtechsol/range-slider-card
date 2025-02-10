@@ -34,6 +34,7 @@ max: 100
 step: 1
 unit: '%'
 ```
+Small version
 ```yaml
 type: custom:range-small-slider-card
 entity_min: input_number.min_value
@@ -43,6 +44,7 @@ max: 100
 step: 1
 unit: '%'
 ```
+Time version
 ```yaml
 type: custom:range-time-slider-card
 entity_time_min: input_datetime.time1
