@@ -1,7 +1,7 @@
 
 # 📊 Home Assistant Range Slider Card  (beta)
 
-A **custom card** for Home Assistant that allows adjusting **two** `input_number` values with a **single slider**, enabling the selection of a custom value range.  
+A **custom card** for Home Assistant that allows adjusting **two** `input_number` or **two** `input_datetime` values with a **single slider**, enabling the selection of a custom value range.  
 
 ## 📷 Preview  
 ![all](https://github.com/Gasp96/range-slider-card/blob/main/assets/Screen_Recording_20250206_183226_Home%20Assistant_1.gif) 
@@ -9,16 +9,16 @@ Small version
 ![all](https://github.com/Gasp96/range-slider-card/blob/main/assets/Screen_Recording_20250207_122654_Home%20Assistant_1.gif) 
 
 ## 🚀 Features  
-✅ **Dual Value Control** – Adjust two `input_number` values with a single slider.  
+✅ **Dual Value Control** – Adjust two `input_number` or two `input_datetime` values with a single slider.  
 ✅ **Custom Ranges** – Define your own minimum and maximum value limits.  
 
 
 ## 📌 Installation  
 
 ### 1️⃣ Manual Installation  
-- Download `range-slider-card.js` or `range-small-slider-card.js`
+- Download `range-slider-card.js` or `range-small-slider-card.js` or `range-time-slider-card.js`
 - Place it in your `www` folder in Home Assistant  
-- Installation instructions: go to Settings > Dashboards > (top right, the three dots) > Resources > Add resource > paste the following URL: `/local/range-slider-card.js` or `/local/range-small-slider-card.js`
+- Installation instructions: go to Settings > Dashboards > (top right, the three dots) > Resources > Add resource > paste the following URL: `/local/range-slider-card.js` or `/local/range-small-slider-card.js` or `range-time-slider-card.js`
 - Restart Home Assistant
 
 ## ⚙️ Configuration  
@@ -42,6 +42,11 @@ min: 0
 max: 100
 step: 1
 unit: '%'
+```
+```yaml
+type: custom:range-time-slider-card
+entity_time_min: input_datetime.time1
+entity_time_max: input_datetime.time2
 ```
 
 ### 🔧 Options  
