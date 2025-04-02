@@ -543,12 +543,10 @@ class RangeSliderCard extends HTMLElement {
           titleElem.textContent = name;
           titleElem.title = name; // Update tooltip
       }
-      if (minSpan) {
-          minSpan.textContent = `Min: ${valueMin.toFixed(1)}${unit}`;
-      }
-      if (maxSpan) {
-          maxSpan.textContent = `Max: ${valueMax.toFixed(1)}${unit}`;
-      }
+      // Update text content using the refactored _updateValueDisplay method
+      // This avoids duplicating the logic here.
+      // We pass the values as an array, similar to how the slider event provides them.
+      this._updateValueDisplay([valueMin.toString(), valueMax.toString()]);
   }
 
   /**
@@ -634,6 +632,7 @@ class RangeSliderCard extends HTMLElement {
         // This handles external state changes correctly.
         if (!this.isUpdating) {
            const currentHandles = this._sliderInstance.get();
+           // Compare numbers, not strings
            if (Number(currentHandles[0]) !== valueMin || Number(currentHandles[1]) !== valueMax) {
                this._sliderInstance.set([valueMin, valueMax], false); // false = don't fire events
                // console.log(`RangeSliderCard (${this.config.name}): Slider handles set to [${valueMin}, ${valueMax}].`);
@@ -684,229 +683,39 @@ class RangeSliderCard extends HTMLElement {
    * @param {string[]} values - Array containing the current slider values as strings.
    */
   _updateValueDisplay(values) {
+    // Ensure config is available
+    if (!this.config) return;
     const { unit } = this.config;
-    // Use optional chaining for safety
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('display', 'block'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('display', 'block'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('visibility', 'visible'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('visibility', 'visible'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('opacity', '1'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('opacity', '1'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('color', 'var(--secondary-text-color)'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('color', 'var(--secondary-text-color)'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('font-size', '0.9em'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('font-size', '0.9em'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('margin-top', '8px'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('margin-top', '8px'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('padding', '0 5px'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('padding', '0 5px'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('width', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('width', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('text-align', 'left'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('text-align', 'right'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('flex-grow', '1'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('flex-grow', '1'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('white-space', 'nowrap'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('white-space', 'nowrap'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('overflow', 'hidden'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('overflow', 'hidden'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('text-overflow', 'ellipsis'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('text-overflow', 'ellipsis'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('max-width', '50%'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('max-width', '50%'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('min-width', '0'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('min-width', '0'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('flex-basis', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('flex-basis', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('flex-shrink', '1'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('flex-shrink', '1'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('order', '0'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('order', '0'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('align-self', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('align-self', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('justify-self', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('justify-self', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('grid-column-start', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('grid-column-start', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('grid-column-end', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('grid-column-end', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('grid-row-start', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('grid-row-start', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('grid-row-end', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('grid-row-end', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('grid-area', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('grid-area', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('margin', '0'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('margin', '0'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('padding', '0 5px'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('padding', '0 5px'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('border', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('border', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('background', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('background', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('box-shadow', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('box-shadow', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('border-radius', '0'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('border-radius', '0'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('outline', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('outline', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('cursor', 'default'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('cursor', 'default'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('line-height', 'normal'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('line-height', 'normal'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('text-transform', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('text-transform', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('letter-spacing', 'normal'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('letter-spacing', 'normal'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('word-spacing', 'normal'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('word-spacing', 'normal'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('text-indent', '0'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('text-indent', '0'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('text-shadow', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('text-shadow', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('font-variant', 'normal'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('font-variant', 'normal'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('font-weight', 'normal'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('font-weight', 'normal'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('font-style', 'normal'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('font-style', 'normal'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('font-family', 'inherit'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('font-family', 'inherit'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('vertical-align', 'baseline'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('vertical-align', 'baseline'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('text-decoration', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('text-decoration', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('user-select', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('user-select', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('pointer-events', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('pointer-events', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('visibility', 'visible'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('visibility', 'visible'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('opacity', '1'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('opacity', '1'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('transition', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('transition', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('animation', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('animation', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('transform', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('transform', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('transform-origin', '50% 50%'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('transform-origin', '50% 50%'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('will-change', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('will-change', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('contain', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('contain', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('content', 'normal'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('content', 'normal'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('counter-increment', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('counter-increment', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('counter-reset', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('counter-reset', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('quotes', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('quotes', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('clip-path', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('clip-path', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('filter', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('filter', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('backdrop-filter', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('backdrop-filter', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('mask', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('mask', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('mask-image', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('mask-image', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('mask-mode', 'match-source'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('mask-mode', 'match-source'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('mask-repeat', 'repeat'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('mask-repeat', 'repeat'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('mask-position', '0% 0%'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('mask-position', '0% 0%'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('mask-clip', 'border-box'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('mask-clip', 'border-box'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('mask-origin', 'border-box'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('mask-origin', 'border-box'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('mask-size', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('mask-size', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('mask-composite', 'add'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('mask-composite', 'add'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('mask-type', 'luminance'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('mask-type', 'luminance'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('shape-outside', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('shape-outside', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('shape-margin', '0px'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('shape-margin', '0px'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('shape-image-threshold', '0'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('shape-image-threshold', '0'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('scroll-behavior', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('scroll-behavior', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('scroll-snap-type', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('scroll-snap-type', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('scroll-snap-align', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('scroll-snap-align', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('scroll-padding', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('scroll-padding', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('scroll-margin', '0px'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('scroll-margin', '0px'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('touch-action', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('touch-action', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('will-change', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('will-change', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('contain', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('contain', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('content', 'normal'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('content', 'normal'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('counter-increment', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('counter-increment', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('counter-reset', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('counter-reset', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('quotes', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('quotes', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('clip-path', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('clip-path', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('filter', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('filter', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('backdrop-filter', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('backdrop-filter', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('mask', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('mask', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('mask-image', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('mask-image', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('mask-mode', 'match-source'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('mask-mode', 'match-source'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('mask-repeat', 'repeat'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('mask-repeat', 'repeat'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('mask-position', '0% 0%'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('mask-position', '0% 0%'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('mask-clip', 'border-box'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('mask-clip', 'border-box'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('mask-origin', 'border-box'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('mask-origin', 'border-box'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('mask-size', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('mask-size', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('mask-composite', 'add'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('mask-composite', 'add'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('mask-type', 'luminance'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('mask-type', 'luminance'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('shape-outside', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('shape-outside', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('shape-margin', '0px'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('shape-margin', '0px'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('shape-image-threshold', '0'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('shape-image-threshold', '0'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('scroll-behavior', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('scroll-behavior', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('scroll-snap-type', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('scroll-snap-type', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('scroll-snap-align', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('scroll-snap-align', 'none'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('scroll-padding', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('scroll-padding', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('scroll-margin', '0px'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('scroll-margin', '0px'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.style.setProperty('touch-action', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('max-value')?.style.setProperty('touch-action', 'auto'); // Ensure visible
-    this.shadowRoot?.getElementById('min-value')?.textContent = `Min: ${parseFloat(values[0]).toFixed(1)}${unit}`;
-    this.shadowRoot?.getElementById('max-value')?.textContent = `Max: ${parseFloat(values[1]).toFixed(1)}${unit}`;
+
+    // Find elements safely
+    const minSpan = this.shadowRoot?.getElementById('min-value');
+    const maxSpan = this.shadowRoot?.getElementById('max-value');
+
+    // Update min value display
+    if (minSpan) {
+        try {
+            const minValue = parseFloat(values[0]);
+            // Check if minValue is a valid number before calling toFixed
+            minSpan.textContent = `Min: ${isNaN(minValue) ? 'N/A' : minValue.toFixed(1)}${unit}`;
+        } catch (e) {
+            console.error("Error updating min value display:", e);
+            minSpan.textContent = "Min: Error";
+        }
+    }
+
+    // Update max value display
+    if (maxSpan) {
+        try {
+            const maxValue = parseFloat(values[1]);
+            // Check if maxValue is a valid number before calling toFixed
+            maxSpan.textContent = `Max: ${isNaN(maxValue) ? 'N/A' : maxValue.toFixed(1)}${unit}`;
+        } catch (e) {
+            console.error("Error updating max value display:", e);
+            maxSpan.textContent = "Max: Error";
+        }
+    }
   }
+
 
   /**
    * Handles the 'change' event from the slider.
@@ -928,6 +737,12 @@ class RangeSliderCard extends HTMLElement {
     // Parse new values
     const newMinValue = parseFloat(values[0]);
     const newMaxValue = parseFloat(values[1]);
+
+    // Check if parsing resulted in valid numbers
+    if (isNaN(newMinValue) || isNaN(newMaxValue)) {
+        console.warn("RangeSliderCard: Invalid values received from slider change event:", values);
+        return;
+    }
 
     // Define a threshold for change based on step size (avoid floating point issues)
     const threshold = Number(step) / 2;
@@ -1069,10 +884,14 @@ customElements.define('range-slider-card', RangeSliderCard);
 
 // Optional: Add card to the Lovelace card picker for easier discovery
 // This requires the card to be loaded as a Lovelace resource (e.g., through HACS or configuration.yaml)
-window.customCards = window.customCards || [];
-window.customCards.push({
-  type: "range-slider-card",
-  name: "Range Slider Card",
-  description: "A card displaying a range slider linked to two input_number entities.",
-  preview: true, // Enable preview in card picker
-});
+// IMPORTANT: Keep this block commented out unless you are packaging the card for distribution (e.g., HACS)
+// and understand how the card picker works. Uncommenting this unnecessarily can sometimes cause issues.
+// --- BEGIN Optional Card Picker Registration ---
+// window.customCards = window.customCards || [];
+// window.customCards.push({
+//   type: "range-slider-card",
+//   name: "Range Slider Card",
+//   description: "A card displaying a range slider linked to two input_number entities.",
+//   preview: true, // Enable preview in card picker
+// });
+// --- END Optional Card Picker Registration ---
