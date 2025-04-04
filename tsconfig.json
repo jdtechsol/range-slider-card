@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+      "target": "ES2020", // Ou ES2021/ESNext - compatível com browsers modernos usados pelo HA
+      "module": "ES2020", // Usa módulos ES nativos
+      "moduleResolution": "node", // Como encontrar módulos
+      "declaration": true, // Gera ficheiros .d.ts (útil para partilha)
+      // "declarationDir": "./dist", // Removed: Not needed for Rollup build with declaration: false
+      "outDir": "./dist", // Onde colocar os ficheiros JS compilados
+      "rootDir": "./src", // Onde estão os seus ficheiros TS fonte
+      "strict": true, // Ativa verificações rigorosas de tipos (recomendado)
+      "esModuleInterop": true, // Melhora a interoperabilidade com módulos CommonJS
+      "skipLibCheck": true, // Não verifica tipos em bibliotecas de terceiros (acelera compilação)
+      "forceConsistentCasingInFileNames": true,
+      "experimentalDecorators": true, // Necessário para os decoradores do Lit (@property, @customElement)
+      "useDefineForClassFields": false, // Necessário para compatibilidade com decoradores Lit legados/atuais
+      "lib": ["ES2020", "DOM", "DOM.Iterable"]
+    },
+    "include": ["src/**/*.ts"], // Quais ficheiros compilar
+    "exclude": ["node_modules", "dist"] // Quais pastas ignorar
+  }
