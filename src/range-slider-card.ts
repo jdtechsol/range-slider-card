@@ -1044,6 +1044,10 @@ export class RangeSliderCard extends LitElement {
         --range-slider-input-background-color: var(--ha-card-background, var(--card-background-color, white));
         --range-slider-input-text-color: var(--primary-text-color);
         --range-slider-handle-transition: left 0.15s ease-out, bottom 0.15s ease-out;
+        /* Title styling */
+        --ha-card-header-font-size: 1em; /* Smaller font size */
+        --ha-card-header-padding: 8px 16px; /* Reduced padding */
+        --ha-card-content-padding: 12px; /* Slightly reduced content padding */
       }
       ha-card {
         height: 100%;
@@ -1059,6 +1063,7 @@ export class RangeSliderCard extends LitElement {
         align-items: stretch;
         flex-grow: 1;
         box-sizing: border-box;
+        padding: var(--ha-card-content-padding, 16px); /* Use variable */
       }
       :host(.vertical) .card-content {
         flex-direction: row;
@@ -1069,9 +1074,11 @@ export class RangeSliderCard extends LitElement {
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: calc(var(--range-slider-handle-size) / 2 + 2px) 0;
+        /* Reduced padding slightly */
+        padding: calc(var(--range-slider-handle-size) / 2 + 1px) 0;
         min-height: var(--range-slider-handle-size);
         cursor: pointer;
+        margin-bottom: 8px; /* Add some space below slider */
       }
       :host(.read-only) .slider-container {
         cursor: default;
@@ -1175,8 +1182,8 @@ export class RangeSliderCard extends LitElement {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-top: 12px;
-        gap: 10px;
+        margin-top: 8px; /* Reduced top margin */
+        gap: 8px; /* Reduced gap */
       }
       :host(.vertical) .info-row {
         flex-direction: column;
@@ -1193,7 +1200,7 @@ export class RangeSliderCard extends LitElement {
         display: flex;
         flex-direction: column;
         align-items: center;
-        min-width: 50px;
+        min-width: 45px; /* Slightly reduce min-width */
       }
       :host(.vertical) .value-label {
         flex-direction: row;
@@ -1204,8 +1211,10 @@ export class RangeSliderCard extends LitElement {
       .value-label .label {
         font-weight: 500;
         color: var(--secondary-text-color);
-        margin-bottom: 2px;
+        margin-bottom: 1px; /* Reduced margin */
         white-space: nowrap;
+        font-size: 0.9em; /* Smaller label font */
+        font-weight: 400; /* Lighter weight */
       }
       :host(.vertical) .value-label .label {
         margin-bottom: 0;
