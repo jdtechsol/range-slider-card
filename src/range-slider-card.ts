@@ -703,8 +703,11 @@ export class RangeSliderCard extends LitElement {
 
   private _handleMove(e: MouseEvent | TouchEvent): void {
     if ((!this._isDraggingMin && !this._isDraggingMax) || !this._config) return;
-    if (e instanceof TouchEvent && this._config.orientation === 'vertical') e.preventDefault();
-    e.preventDefault();
+    // Prevent default scrolling behavior only when dragging vertically on touch devices
+    if (e instanceof TouchEvent && this._config.orientation === 'vertical') {
+        e.preventDefault();
+    }
+    // Removed redundant e.preventDefault() here
 
     const track = this.shadowRoot?.querySelector('.slider-track');
     if (!track) return;

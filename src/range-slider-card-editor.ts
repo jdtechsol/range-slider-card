@@ -59,36 +59,36 @@ export class RangeSliderCardEditor extends LitElement implements LovelaceCardEdi
           <ha-entity-picker
             .hass=${this.hass}
             .label="Entidade Mínima (Obrigatório)"
-            .value=${getValue('entity_min')}
-            .configValue=${'entity_min'}
-            .includeDomains=${['input_number']}
-            allow-custom-entity
-            @value-changed=${this._valueChanged}
-            required
-          ></ha-entity-picker>
-          <ha-entity-picker
-            .hass=${this.hass}
-            .label="Entidade Máxima (Obrigatório)"
-            .value=${getValue('entity_max')}
-            .configValue=${'entity_max'}
-            .includeDomains=${['input_number']}
-            allow-custom-entity
-            @value-changed=${this._valueChanged}
-            required
-          ></ha-entity-picker>
-          <ha-entity-picker
-            .hass=${this.hass}
-            .label="Entidade de Valor (Opcional, para marcador)"
-            .value=${getValue('entity_value')}
-            .configValue=${'entity_value'}
-            .includeDomains=${['sensor', 'input_number']}
-            allow-custom-entity
-            @value-changed=${this._valueChanged}
+                  .value=${getValue('entity_min')}
+                  .configValue=${'entity_min'}
+                  .includeDomains=${['input_number']}
+                  allow-custom-entity
+                  @value-changed=${this._valueChanged}
+                  required
+                ></ha-entity-picker>
+                <ha-entity-picker
+                  .hass=${this.hass}
+                  .label="Entidade Máxima (Obrigatório)"
+                  .value=${getValue('entity_max')}
+                  .configValue=${'entity_max'}
+                  .includeDomains=${['input_number']}
+                  allow-custom-entity
+                  @value-changed=${this._valueChanged}
+                  required
+                ></ha-entity-picker>
+                <ha-entity-picker
+                  .hass=${this.hass}
+                  .label="Entidade de Valor (Opcional, para marcador)"
+                  .value=${getValue('entity_value')}
+                  .configValue=${'entity_value'}
+                  .includeDomains=${['sensor', 'input_number']}
+                  allow-custom-entity
+                  @value-changed=${this._valueChanged}
           ></ha-entity-picker>
         </section>
 
         <section>
-          <h3>Título e Unidade</h3>
+          <!-- Removed H3 Title: Título e Unidade -->
           <ha-textfield
             .label="Nome do Cartão (Opcional)"
             .value=${getValue('name', 'Range Slider')}
@@ -104,7 +104,7 @@ export class RangeSliderCardEditor extends LitElement implements LovelaceCardEdi
         </section>
 
         <section>
-          <h3>Limites e Passo da Escala</h3>
+          <!-- Removed H3 Title: Limites e Passo da Escala -->
           <div class="side-by-side">
             <ha-textfield
               .label="Mínimo Absoluto"
@@ -218,7 +218,7 @@ export class RangeSliderCardEditor extends LitElement implements LovelaceCardEdi
               @change=${this._valueChanged}
             ></ha-switch>
           </ha-formfield>
-          <ha-formfield .label=${'Mostrar Marcador de Valor (se Entidade de Valor definida)'}>
+          <ha-formfield .label=${"Mostrar Marcador de Valor (Requer 'Entidade de Valor' selecionada)"}>
             <ha-switch
               .checked=${Boolean(getValue('show_value_marker', false))}
               .configValue=${'show_value_marker'}
