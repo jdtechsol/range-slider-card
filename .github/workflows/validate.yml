@@ -17,6 +17,6 @@ jobs:
       - name: HACS Validation
         uses: hacs/action@main
         with:
-          category: lovelace
+          category: plugin
           # Optional: If your repository name doesn't match the integration ID
           # integration_id: range-slider-card
