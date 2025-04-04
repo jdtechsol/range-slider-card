@@ -45,6 +45,7 @@
   },
   "dependencies": {
     "custom-card-helpers": "^1.9.0",
-    "lit": "^3.1.4"
+    "lit": "^3.1.4",
+    "range-slider-card": "file:"
   }
 }
