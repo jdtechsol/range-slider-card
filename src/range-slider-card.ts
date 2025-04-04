@@ -27,6 +27,9 @@ export interface RangeSliderCardConfig extends LovelaceCardConfig {
   show_inputs?: boolean;
   show_tooltips?: boolean;
   show_value_marker?: boolean;
+  read_only_min?: boolean;
+  read_only_max?: boolean;
+  read_only_value?: boolean; // Added for potential future use with entity_value
   tap_action?: ActionConfig;
   hold_action?: ActionConfig;
   double_tap_action?: ActionConfig;
@@ -121,6 +124,9 @@ export class RangeSliderCard extends LitElement {
       show_inputs: false,
       show_tooltips: false,
       show_value_marker: false,
+      read_only_min: config.read_only ?? false, // Default to global read_only
+      read_only_max: config.read_only ?? false, // Default to global read_only
+      read_only_value: config.read_only ?? false, // Default to global read_only
       tap_action: { action: 'more-info' },
       hold_action: undefined,
       double_tap_action: undefined,
@@ -224,14 +230,14 @@ export class RangeSliderCard extends LitElement {
                 @keydown=${this._handleKeyDown}
                 @focus=${() => this._handleFocus('min')}
                 @blur=${this._handleBlur}
-                tabindex=${this._config.read_only ? '-1' : '0'}
+                tabindex=${this._config.read_only || this._config.read_only_min ? '-1' : '0'}
                 role="slider"
                 aria-valuemin=${min}
                 aria-valuemax=${this._maxValue}
                 aria-valuenow=${this._minValue}
                 aria-valuetext=${minText}
                 aria-label="Minimum value"
-                aria-disabled=${this._config.read_only}
+                aria-disabled=${this._config.read_only || this._config.read_only_min}
                 aria-orientation=${this._config.orientation}
               >
                 ${this._config.show_tooltips && (this._isDraggingMin || this._activeHandle === 'min')
@@ -247,14 +253,14 @@ export class RangeSliderCard extends LitElement {
                 @keydown=${this._handleKeyDown}
                 @focus=${() => this._handleFocus('max')}
                 @blur=${this._handleBlur}
-                tabindex=${this._config.read_only ? '-1' : '0'}
+                tabindex=${this._config.read_only || this._config.read_only_max ? '-1' : '0'}
                 role="slider"
                 aria-valuemin=${this._minValue}
                 aria-valuemax=${max}
                 aria-valuenow=${this._maxValue}
                 aria-valuetext=${maxText}
                 aria-label="Maximum value"
-                aria-disabled=${this._config.read_only}
+                aria-disabled=${this._config.read_only || this._config.read_only_max}
                 aria-orientation=${this._config.orientation}
               >
                 ${this._config.show_tooltips && (this._isDraggingMax || this._activeHandle === 'max')
@@ -267,7 +273,7 @@ export class RangeSliderCard extends LitElement {
           <div class="info-row">
             <div class="value-label min-label">
               <span class="label">Min:</span>
-              ${this._config.show_inputs && !this._config.read_only
+              ${this._config.show_inputs
                 ? html`
                     <input
                       type="number"
@@ -278,7 +284,7 @@ export class RangeSliderCard extends LitElement {
                       .max=${this._maxValue - step * MIN_STEP_SEPARATION_FACTOR}
                       aria-label="Minimum value input"
                       class="value-input"
-                      ?disabled=${this._config.read_only}
+                      ?disabled=${this._config.read_only || this._config.read_only_min}
                     />
                   `
                 : html` <span class="value">${this._formatValue(this._minValue)}${this._config.unit ?? ''}</span> `}
@@ -297,7 +303,7 @@ export class RangeSliderCard extends LitElement {
 
             <div class="value-label max-label">
               <span class="label">Max:</span>
-              ${this._config.show_inputs && !this._config.read_only
+              ${this._config.show_inputs
                 ? html`
                     <input
                       type="number"
@@ -308,7 +314,7 @@ export class RangeSliderCard extends LitElement {
                       .max=${max}
                       aria-label="Maximum value input"
                       class="value-input"
-                      ?disabled=${this._config.read_only}
+                      ?disabled=${this._config.read_only || this._config.read_only_max}
                     />
                   `
                 : html` <span class="value">${this._formatValue(this._maxValue)}${this._config.unit ?? ''}</span> `}
@@ -404,27 +410,42 @@ export class RangeSliderCard extends LitElement {
       allowZero = true,
       mustBePositive = false
     ): number | null | undefined => {
-      if (!stateObj || !entityKey) return null;
+      if (!stateObj || !entityKey) return null; // Return null for missing optional entities
       const state = stateObj.state;
       if (state === 'unavailable' || state === 'unknown') {
         const errorMsg = `Invalid state for ${entityKey}: ${state}`;
+        // Only treat required entities or limits/step as errors if unavailable
         if (
-          ['entity_min', 'entity_max'].includes(entityKey) ||
-          this._config.min_entity === entityKey ||
-          this._config.max_entity === entityKey ||
-          this._config.step_entity === entityKey
+          entityKey === this._config.entity_min ||
+          entityKey === this._config.entity_max ||
+          entityKey === this._config.min_entity ||
+          entityKey === this._config.max_entity ||
+          entityKey === this._config.step_entity
         ) {
           this._error = errorMsg;
-          return undefined;
+          return undefined; // Indicate error for required/limit/step entities
         } else {
+          // For optional entity_value, just warn and return null
           console.warn(`Range Slider Card: ${errorMsg}. Ignoring value.`);
           return null;
         }
       }
       const value = parseFloat(state);
       if (isNaN(value)) {
-        this._error = `Invalid numeric state for ${entityKey}: ${state}`;
-        return undefined;
+        // Only treat required entities or limits/step as errors if NaN
+         if (
+          entityKey === this._config.entity_min ||
+          entityKey === this._config.entity_max ||
+          entityKey === this._config.min_entity ||
+          entityKey === this._config.max_entity ||
+          entityKey === this._config.step_entity
+        ) {
+          this._error = `Invalid numeric state for ${entityKey}: ${state}`;
+          return undefined; // Indicate error
+        } else {
+           console.warn(`Range Slider Card: Invalid numeric state for ${entityKey}: ${state}. Ignoring value.`);
+           return null; // Return null for optional entity_value if NaN
+        }
       }
       if (!allowZero && value === 0) {
         this._error = `Invalid state for ${entityKey}: must not be zero`;
@@ -616,7 +637,6 @@ export class RangeSliderCard extends LitElement {
     if (
       !this.hass ||
       !this._config ||
-      this._config.read_only ||
       !entityId ||
       value === null ||
       value === undefined ||
@@ -624,6 +644,14 @@ export class RangeSliderCard extends LitElement {
     ) {
       return;
     }
+
+    // Check individual read-only flags
+    if (this._config.read_only) return; // Global override
+    if (entityId === this._config.entity_min && this._config.read_only_min) return;
+    if (entityId === this._config.entity_max && this._config.read_only_max) return;
+    // Add check for read_only_value if entity_value setting becomes possible
+    // if (entityId === this._config.entity_value && this._config.read_only_value) return;
+
     const currentEntityState = this.hass.states[entityId];
     const currentValue = currentEntityState ? parseFloat(currentEntityState.state) : NaN;
     const step = this._getEffectiveStep();
@@ -682,7 +710,7 @@ export class RangeSliderCard extends LitElement {
   }
 
   private _handleMinDown(e: MouseEvent | TouchEvent): void {
-    if (this._config?.read_only || this._isDraggingMax || (e instanceof MouseEvent && e.button !== 0)) return;
+    if (this._config?.read_only || this._config?.read_only_min || this._isDraggingMax || (e instanceof MouseEvent && e.button !== 0)) return;
     e.stopPropagation();
     this._isDraggingMin = true;
     this._tooltipValueMin = this._minValue;
@@ -692,7 +720,7 @@ export class RangeSliderCard extends LitElement {
   }
 
   private _handleMaxDown(e: MouseEvent | TouchEvent): void {
-    if (this._config?.read_only || this._isDraggingMin || (e instanceof MouseEvent && e.button !== 0)) return;
+    if (this._config?.read_only || this._config?.read_only_max || this._isDraggingMin || (e instanceof MouseEvent && e.button !== 0)) return;
     e.stopPropagation();
     this._isDraggingMax = true;
     this._tooltipValueMax = this._maxValue;
@@ -771,6 +799,10 @@ export class RangeSliderCard extends LitElement {
     if (!this._config || this._config.read_only || !this._activeHandle) return;
 
     const handleType = this._activeHandle;
+    // Check individual read-only for the active handle
+    if (handleType === 'min' && this._config.read_only_min) return;
+    if (handleType === 'max' && this._config.read_only_max) return;
+
     const step = this._getEffectiveStep();
     const minLimit = this._getEffectiveMin();
     const maxLimit = this._getEffectiveMax();
@@ -856,7 +888,9 @@ export class RangeSliderCard extends LitElement {
     const minLimit = this._getEffectiveMin();
     const maxLimit = this._getEffectiveMax();
 
+    // Check individual read-only before setting value
     if (minDiff <= maxDiff || clickedValue < currentMinValue) {
+      if (this._config.read_only_min) return; // Don't modify if min is read-only
       const effectiveMax = currentMaxValue - minSeparation;
       const finalValue = this._clampAndStep(clickedValue, minLimit, effectiveMax, step);
       if (finalValue !== this._minValue) {
@@ -865,6 +899,7 @@ export class RangeSliderCard extends LitElement {
         (this.shadowRoot?.querySelector('.min-handle') as HTMLElement)?.focus();
       }
     } else {
+      if (this._config.read_only_max) return; // Don't modify if max is read-only
       const effectiveMin = currentMinValue + minSeparation;
       const finalValue = this._clampAndStep(clickedValue, effectiveMin, maxLimit, step);
       if (finalValue !== this._maxValue) {
@@ -877,6 +912,10 @@ export class RangeSliderCard extends LitElement {
 
   private _handleInputChange(e: Event, type: 'min' | 'max'): void {
     if (!this._config || this._config.read_only) return;
+    // Check individual read-only for the specific input
+    if (type === 'min' && this._config.read_only_min) return;
+    if (type === 'max' && this._config.read_only_max) return;
+
     const input = e.target as HTMLInputElement;
     const value = parseFloat(input.value);
 

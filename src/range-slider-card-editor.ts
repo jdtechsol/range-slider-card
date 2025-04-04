@@ -194,6 +194,25 @@ export class RangeSliderCardEditor extends LitElement implements LovelaceCardEdi
               .checked=${Boolean(getValue('read_only', false))}
               .configValue=${'read_only'}
               @change=${this._valueChanged}
+              title=${"Define se todo o slider é apenas leitura"}
+            ></ha-switch>
+          </ha-formfield>
+          <ha-formfield .label=${'Apenas Leitura (Mínimo)'}>
+            <ha-switch
+              .checked=${Boolean(getValue('read_only_min', getValue('read_only', false)))}
+              .configValue=${'read_only_min'}
+              @change=${this._valueChanged}
+              .disabled=${Boolean(getValue('read_only', false))}
+              title=${"Define se o puxador mínimo é apenas leitura (ignorado se 'Modo Apenas Leitura' global estiver ativo)"}
+            ></ha-switch>
+          </ha-formfield>
+          <ha-formfield .label=${'Apenas Leitura (Máximo)'}>
+            <ha-switch
+              .checked=${Boolean(getValue('read_only_max', getValue('read_only', false)))}
+              .configValue=${'read_only_max'}
+              @change=${this._valueChanged}
+              .disabled=${Boolean(getValue('read_only', false))}
+              title=${"Define se o puxador máximo é apenas leitura (ignorado se 'Modo Apenas Leitura' global estiver ativo)"}
             ></ha-switch>
           </ha-formfield>
           <ha-formfield .label=${'Mostrar Intervalo (Max - Min)'}>
@@ -361,6 +380,9 @@ export class RangeSliderCardEditor extends LitElement implements LovelaceCardEdi
       case 'orientation':
         return 'horizontal';
       case 'read_only':
+      case 'read_only_min': // Inherits global read_only default
+      case 'read_only_max': // Inherits global read_only default
+      case 'read_only_value': // Inherits global read_only default
         return false;
       case 'show_range':
         return false;
