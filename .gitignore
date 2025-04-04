@@ -93,7 +93,7 @@ out
 
 # Nuxt.js build / generate output
 .nuxt
-dist
+# dist # Removed for HACS compliance - commit the built file
 
 # Gatsby files
 .cache/
