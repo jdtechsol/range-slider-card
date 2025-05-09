@@ -279,6 +279,7 @@ export class RangeSliderCard extends LitElement {
                       type="number"
                       .value=${this._formatValue(displayMinVal)}
                       @change=${(e: Event) => this._handleInputChange(e, 'min')}
+                      @input=${(e: Event) => this._handleInputChange(e, 'min')}
                       .step=${step}
                       .min=${min}
                       .max=${this._maxValue - step * MIN_STEP_SEPARATION_FACTOR}
@@ -309,6 +310,7 @@ export class RangeSliderCard extends LitElement {
                       type="number"
                       .value=${this._formatValue(displayMaxVal)}
                       @change=${(e: Event) => this._handleInputChange(e, 'max')}
+                      @input=${(e: Event) => this._handleInputChange(e, 'max')}
                       .step=${step}
                       .min=${this._minValue + step * MIN_STEP_SEPARATION_FACTOR}
                       .max=${max}
